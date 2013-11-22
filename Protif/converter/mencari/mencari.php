@@ -1,40 +1,52 @@
 <?php
-
-session_start();
-$keyword = $_SESSION['kata'];
-echo $keyword;
 class mencari {
-	public function caribuku($keyword){
+	public function caribuku($keyword, $kategori){
+	switch ($kategori){
+	case 'buku':	
 	$daftarbuku = simplexml_load_file('daftarbuku.xml');
 	foreach ($daftarbuku as $atribut) {
-		if ($atribut-> judul == $keyword) {
-			$judulbuku = $atribut -> judul;
-			$pengarangbuku = $atribut -> pengarang;
-			$halaman = $atribut -> halaman; 
-			echo $judulbuku . "<br>" ;
-			echo $pengarangbuku . "<br>" ; 
-			echo $halaman . "<br>" ;
-			return;
+			if ($atribut-> judul == $keyword) {
+				$judulbuku = $atribut -> judul;
+				$pengarangbuku = $atribut -> pengarang;
+				$halaman = $atribut -> halaman; 
+				$result = array();
+				$result['status'] = 'OK';
+				$result['judulbuku'] = (string) $judulbuku;
+				$result['pengarang'] = (string) $pengarangbuku;
+				$result['halaman'] = (string) $halaman;
+ 				//print_r ((string) $judulbuku);
+				return $result;
+			}
+			else{
+				$daftarbuku = simplexml_load_file('buku.xml');
+				foreach ($daftarbuku as $atribut) {
+					if ($atribut-> judul == $keyword) {
+						$judulbuku = $atribut -> judul;
+						$pengarangbuku = $atribut -> pengarang;
+						$halaman = $atribut -> halaman;
+						$result = array();
+						$result['status'] = 'OK';
+						$result['judulbuku'] = (string) $judulbuku;
+						$result['pengarang'] = (string) $pengarangbuku;
+						$result['halaman'] = (string) $halaman;
+		 				//print_r ((string) $judulbuku);
+						return $result;
+					}
+			}
+			}
 		}
-		else{
-			$daftarbuku = simplexml_load_file('buku.xml');
-			foreach ($daftarbuku as $atribut) {
-				if ($atribut-> judul == $keyword) {
-					$judulbuku = $atribut -> judul;
-					$pengarangbuku = $atribut -> pengarang;
-					$halaman = $atribut -> halaman;
-					echo $judulbuku;
-					echo $pengarangbuku; 
-					echo $halaman;
-					return;
-				}
-		}
-		}
-	}
-	echo 'Buku yang anda cari tidak ada';
-			return;
+		break;
 
-}
+
+	}	
+	
+		$result = array();
+
+		$result['status'] = 'error';
+		$result['judulbuku'] = $keyword;
+		return $result;
+
+	}
 	
 }
 	
